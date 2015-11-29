@@ -12,16 +12,17 @@ int f(vector<int>& A){
     vector<int> A1{A};
     vector<int> A2;
     sort(A1.begin(),A1.end());
-    unique_copy(A1.begin(),A1.end(),back_inserter(A2));
+    unique_copy(A1.begin(),A1.end(),back_inserter(A2));     //remove the duplicates
     int dis{1};
 
+    //study two adjacent elements
     for(int i=0;i!=A2.size()-1;++i){
-        auto index1_for = find(A.begin(),A.end(),A2[i]);
-        auto index1_back = find(A.rbegin(),A.rend(),A2[i]);
+        auto index1_for = find(A.begin(),A.end(),A2[i]);        //find the first element from the beginning 
+        auto index1_back = find(A.rbegin(),A.rend(),A2[i]);     //find the first element from the end
         int index1_dis_for = distance(A.begin(),index1_for);
         int index1_dis_back = A.size() - distance(A.rbegin(),index1_back) -1;
-        auto index2_for = find(A.begin(),A.end(),A2[i+1]);
-        auto index2_back = find(A.rbegin(),A.rend(),A2[i+1]);
+        auto index2_for = find(A.begin(),A.end(),A2[i+1]);          //find the second element from the beginning
+        auto index2_back = find(A.rbegin(),A.rend(),A2[i+1]);       //find the second element from the end
         int index2_dis_for = distance(A.begin(),index2_for);
         int index2_dis_back = A.size() - distance(A.rbegin(),index2_back) -1;
         if(dis<max(abs(index1_dis_back-index2_dis_for),abs(index1_dis_for-index2_dis_back)))
