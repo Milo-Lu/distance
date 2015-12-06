@@ -6,35 +6,38 @@
 
 using namespace std;
 
-int f(vector<int>& A){
+int f(const vector<int>& A){
     if(A.size()==0) return -1;
-    if(A.size()==1) return 0;
-    vector<int> A1{A};
-    vector<int> A2;
-    sort(A1.begin(),A1.end());
-    unique_copy(A1.begin(),A1.end(),back_inserter(A2));     //remove the duplicates
-    int dis{1};
+    vector<pair<int,int>> A2;       //<value,position> pair
 
-    //study two adjacent elements
+    for(int i=0;i!=A.size();++i) A2.push_back({A[i],i});     //book the position of each element
+
+    //compare by value. If two elements have the same value, compare their positions
+    sort(A2.begin(),A2.end(),[](pair<int,int> pair1,pair<int,int> pair2){return pair1.first==pair2.first ? (pair1.second<pair2.second) : (pair1.first<pair2.first);});
+    int max_dis{};
+
     for(int i=0;i!=A2.size()-1;++i){
-        auto index1_for = find(A.begin(),A.end(),A2[i]);        //find the first element from the beginning 
-        auto index1_back = find(A.rbegin(),A.rend(),A2[i]);     //find the first element from the end
-        int index1_dis_for = distance(A.begin(),index1_for);
-        int index1_dis_back = A.size() - distance(A.rbegin(),index1_back) -1;
-        auto index2_for = find(A.begin(),A.end(),A2[i+1]);          //find the second element from the beginning
-        auto index2_back = find(A.rbegin(),A.rend(),A2[i+1]);       //find the second element from the end
-        int index2_dis_for = distance(A.begin(),index2_for);
-        int index2_dis_back = A.size() - distance(A.rbegin(),index2_back) -1;
-        if(dis<max(abs(index1_dis_back-index2_dis_for),abs(index1_dis_for-index2_dis_back)))
-            dis = max(abs(index1_dis_back-index2_dis_for),abs(index1_dis_for-index2_dis_back));
+        int index1_min{A2[i].second};
+        int index1_max{A2[i].second};
+
+        while(i!=A2.size()-1 && A2[i].first==A2[i+1].first) index1_max = A2[++i].second;        //find the largest position of a duplicated element
+
+        if(i==A2.size()-1) break;
+
+        int index2_min{A2[i+1].second};
+        int index2_max{A2[i+1].second};
+
+        while(i!=A2.size()-2 && A2[i+1].first==A2[i+2].first) index2_max = A2[++i].second;
+
+        int dis = abs(index1_max-index2_min) < abs(index2_max-index1_min) ? abs(index2_max-index1_min) : abs(index1_max-index2_min);
+        if(max_dis<dis) max_dis = dis;
     }
-    return dis;
+    return max_dis;
 }
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-
     vector<int> vi{4,5,34,22,7,5,5,4,4};
     int result = f(vi);
     cout << result << '\n';
