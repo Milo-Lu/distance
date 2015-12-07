@@ -20,14 +20,14 @@ int f(const vector<int>& A){
         int index1_min{A2[i].second};
         int index1_max{A2[i].second};
 
-        while(i!=A2.size()-1 && A2[i].first==A2[i+1].first) index1_max = A2[++i].second;        //find the largest position of a duplicated element
+        while(i<A2.size()-1 && A2[i].first==A2[i+1].first) index1_max = A2[++i].second;        //find the largest position of a duplicated element
 
         if(i==A2.size()-1) break;
 
         int index2_min{A2[i+1].second};
         int index2_max{A2[i+1].second};
 
-        while(i!=A2.size()-2 && A2[i+1].first==A2[i+2].first) index2_max = A2[++i].second;
+        while(i<A2.size()-2 && A2[i+1].first==A2[i+2].first) index2_max = A2[++i].second;
 
         int dis = abs(index1_max-index2_min) < abs(index2_max-index1_min) ? abs(index2_max-index1_min) : abs(index1_max-index2_min);
         if(max_dis<dis) max_dis = dis;
